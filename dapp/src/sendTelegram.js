@@ -40,14 +40,14 @@ async function start() {
     throw Error('Failed to parse requester secret');
   }
 
-  // const deserializer = new IExecDataProtectorDeserializer();
-  // const chatId = await deserializer.getValue('telegram', 'string');
+  const deserializer = new IExecDataProtectorDeserializer();
+  const chatId = await deserializer.getValue('telegram', 'string');
 
   console.log('serial ok');
 
   const unsafeEnvVars = {
     iexecOut: process.env.IEXEC_OUT,
-    chatId: requesterSecret.chatId,
+    chatId: chatId,
     telegramContent: requesterSecret.message,
     telegramContentEncryptionKey: requesterSecret.telegramContentEncryptionKey,
     botToken: developerSecret.TELEGRAM_BOT_TOKEN,

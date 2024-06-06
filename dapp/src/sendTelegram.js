@@ -2,7 +2,7 @@ const { promises: fs } = require('fs');
 const {
   IExecDataProtectorDeserializer,
 } = require('@iexec/dataprotector-deserializer');
-const sendEmail = require('./emailService');
+const sendTelegram = require('./telegramService');
 const validateInputs = require('./validateInputs');
 const {
   downloadEncryptedContent,
@@ -22,8 +22,11 @@ async function writeTaskOutput(path, message) {
 async function start() {
   // Parse the developer secret environment variable
   let developerSecret;
+  console.log('starting now');
   try {
+    console.log('devapp', process.env.IEXEC_APP_DEVELOPER_SECRET);
     developerSecret = JSON.parse(process.env.IEXEC_APP_DEVELOPER_SECRET);
+    console.log('dev secret ok', developerSecret);
   } catch {
     throw Error('Failed to parse the developer secret');
   }
@@ -32,42 +35,41 @@ async function start() {
     requesterSecret = process.env.IEXEC_REQUESTER_SECRET_1
       ? JSON.parse(process.env.IEXEC_REQUESTER_SECRET_1)
       : {};
+    console.log('req secret ok');
   } catch {
     throw Error('Failed to parse requester secret');
   }
 
-  const deserializer = new IExecDataProtectorDeserializer();
-  const email = await deserializer.getValue('email', 'string');
+  // const deserializer = new IExecDataProtectorDeserializer();
+  // const chatId = await deserializer.getValue('telegram', 'string');
+
+  console.log('serial ok');
 
   const unsafeEnvVars = {
     iexecOut: process.env.IEXEC_OUT,
-    mailJetApiKeyPublic: developerSecret.MJ_APIKEY_PUBLIC,
-    mailJetApiKeyPrivate: developerSecret.MJ_APIKEY_PRIVATE,
-    mailJetSender: developerSecret.MJ_SENDER,
-    emailSubject: requesterSecret.emailSubject,
-    emailContentMultiAddr: requesterSecret.emailContentMultiAddr,
-    contentType: requesterSecret.contentType,
-    senderName: requesterSecret.senderName,
-    emailContentEncryptionKey: requesterSecret.emailContentEncryptionKey,
+    chatId: requesterSecret.chatId,
+    telegramContent: requesterSecret.message,
+    telegramContentEncryptionKey: requesterSecret.telegramContentEncryptionKey,
+    botToken: developerSecret.TELEGRAM_BOT_TOKEN,
   };
-  const envVars = validateInputs(unsafeEnvVars);
-  const encryptedEmailContent = await downloadEncryptedContent(
-    envVars.emailContentMultiAddr
-  );
-  const emailContent = decryptContent(
-    encryptedEmailContent,
-    envVars.emailContentEncryptionKey
-  );
+  console.log('unsafevar');
 
-  const response = await sendEmail({
-    email,
-    mailJetApiKeyPublic: envVars.mailJetApiKeyPublic,
-    mailJetApiKeyPrivate: envVars.mailJetApiKeyPrivate,
-    emailSubject: envVars.emailSubject,
-    emailContent,
-    mailJetSender: envVars.mailJetSender,
-    contentType: envVars.contentType,
-    senderName: envVars.senderName,
+  const envVars = validateInputs(unsafeEnvVars);
+  console.log('validate ok', envVars);
+
+  // const encryptedTelegramContent = await downloadEncryptedContent(
+  //   envVars.telegramContentMultiAddr
+  // );
+  // const telegramContent = decryptContent(
+  //   encryptedTelegramContent,
+  //   envVars.telegramContentEncryptionKey
+  // );
+  console.log('message de sendtel', envVars.telegramContent);
+
+  const response = await sendTelegram({
+    chatId: envVars.chatId,
+    message: envVars.telegramContent,
+    botToken: envVars.botToken,
   });
 
   await writeTaskOutput(

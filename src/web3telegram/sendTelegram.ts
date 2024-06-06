@@ -1,6 +1,5 @@
 import { Buffer } from 'buffer';
 import {
-  DEFAULT_CONTENT_TYPE,
   MAX_DESIRED_APP_ORDER_PRICE,
   MAX_DESIRED_DATA_ORDER_PRICE,
   MAX_DESIRED_WORKERPOOL_ORDER_PRICE,
@@ -13,12 +12,9 @@ import { checkProtectedDataValidity } from '../utils/subgraphQuery.js';
 import {
   addressOrEnsSchema,
   addressSchema,
-  contentTypeSchema,
-  emailContentSchema,
-  emailSubjectSchema,
-  labelSchema,
+  telegramContentSchema, //todo  : telegram content schema? ok
   positiveNumberSchema,
-  senderNameSchema,
+  labelSchema,
   throwIfMissing,
 } from '../utils/validators.js';
 import {
@@ -27,12 +23,12 @@ import {
   IExecConsumer,
   IpfsGatewayConfigConsumer,
   IpfsNodeConfigConsumer,
-  SendEmailParams,
-  SendEmailResponse,
+  SendTelegramParams, //todo "" ok
+  SendTelegramResponse, // todo c'est quoi ok
   SubgraphConsumer,
 } from './types.js';
 
-export const sendEmail = async ({
+export const sendTelegram = async ({
   graphQLClient = throwIfMissing(),
   iexec = throwIfMissing(),
   workerpoolAddressOrEns = PROD_WORKERPOOL_ADDRESS,
@@ -40,42 +36,28 @@ export const sendEmail = async ({
   dappWhitelistAddress,
   ipfsNode,
   ipfsGateway,
-  emailSubject,
-  emailContent,
-  contentType = DEFAULT_CONTENT_TYPE,
+  telegramContent, // contenu du msg ?
   label,
   dataMaxPrice = MAX_DESIRED_DATA_ORDER_PRICE,
   appMaxPrice = MAX_DESIRED_APP_ORDER_PRICE,
   workerpoolMaxPrice = MAX_DESIRED_WORKERPOOL_ORDER_PRICE,
-  senderName,
-  protectedData,
+  protectedData, // le chatid donc ?
 }: IExecConsumer &
   SubgraphConsumer &
   DappAddressConsumer &
   DappWhitelistAddressConsumer &
   IpfsNodeConfigConsumer &
   IpfsGatewayConfigConsumer &
-  SendEmailParams): Promise<SendEmailResponse> => {
+  SendTelegramParams): Promise<SendTelegramResponse> => {
   try {
     const vDatasetAddress = addressOrEnsSchema()
       .required()
       .label('protectedData')
       .validateSync(protectedData);
-    const vEmailSubject = emailSubjectSchema()
+    const vTelegramContent = telegramContentSchema() //todo : content msg telegram ok?
       .required()
-      .label('emailSubject')
-      .validateSync(emailSubject);
-    const vEmailContent = emailContentSchema()
-      .required()
-      .label('emailContent')
-      .validateSync(emailContent);
-    const vContentType = contentTypeSchema()
-      .required()
-      .label('contentType')
-      .validateSync(contentType);
-    const vSenderName = senderNameSchema()
-      .label('senderName')
-      .validateSync(senderName);
+      .label('telegramContent')
+      .validateSync(telegramContent);
     const vLabel = labelSchema().label('label').validateSync(label);
     const vWorkerpoolAddressOrEns = addressOrEnsSchema()
       .required()
@@ -105,7 +87,7 @@ export const sendEmail = async ({
       vDatasetAddress
     );
     if (!isValidProtectedData) {
-      throw new Error('ProtectedData is not valid');
+      throw new Error('ProtectedData is not valid : missing telegram field');
     }
 
     const requesterAddress = await iexec.wallet.getAddress();
@@ -124,7 +106,7 @@ export const sendEmail = async ({
       apporder,
       workerpoolorder,
     ] = await Promise.all([
-      // Fetch dataset order for web3mail app
+      // Fetch dataset order for web3telegram app
       iexec.orderbook
         .fetchDatasetOrderbook(vDatasetAddress, {
           app: dappAddressOrENS,
@@ -136,7 +118,7 @@ export const sendEmail = async ({
           );
           return desiredPriceDataOrderbook[0]?.order; // may be undefined
         }),
-      // Fetch dataset order for web3mail whitelist
+      // Fetch dataset order for web3telegram whitelist
       iexec.orderbook
         .fetchDatasetOrderbook(vDatasetAddress, {
           app: vDappWhitelistAddress,
@@ -199,11 +181,14 @@ export const sendEmail = async ({
 
     // Push requester secrets
     const requesterSecretId = generateSecureUniqueId(16);
-    const emailContentEncryptionKey = iexec.dataset.generateEncryptionKey();
+    const telegramContentEncryptionKey = iexec.dataset.generateEncryptionKey(); //todo : a utiliser pour encrypter le msg ! ok?
     const encryptedFile = await iexec.dataset
-      .encrypt(Buffer.from(vEmailContent, 'utf8'), emailContentEncryptionKey)
+      .encrypt(
+        Buffer.from(vTelegramContent, 'utf8'),
+        telegramContentEncryptionKey
+      )
       .catch((e) => {
-        throw new WorkflowError('Failed to encrypt email content', e);
+        throw new WorkflowError('Failed to encrypt telegram content', e);
       });
     const cid = await ipfs
       .add(encryptedFile, {
@@ -211,18 +196,19 @@ export const sendEmail = async ({
         ipfsGateway: ipfsGateway,
       })
       .catch((e) => {
-        throw new WorkflowError('Failed to upload encrypted email content', e);
+        throw new WorkflowError(
+          'Failed to upload encrypted telegram content',
+          e
+        );
       });
     const multiaddr = `/ipfs/${cid}`;
 
     await iexec.secrets.pushRequesterSecret(
+      //push la clef d'encr dans SMS pour permettre à la dapp d'y acceder ensuite
       requesterSecretId,
       JSON.stringify({
-        emailSubject: vEmailSubject,
-        emailContentMultiAddr: multiaddr,
-        contentType: vContentType,
-        senderName: vSenderName,
-        emailContentEncryptionKey,
+        telegramContentMultiAddr: multiaddr,
+        telegramContentEncryptionKey,
       })
     );
 
@@ -252,7 +238,7 @@ export const sendEmail = async ({
       workerpoolorder: workerpoolorder,
       requestorder: requestorder,
     });
-    const taskId = await iexec.deal.computeTaskId(dealid, 0);
+    const taskId = await iexec.deal.computeTaskId(dealid, 0); //todo : observable  cf iexec.task.obsTask
 
     return {
       taskId,

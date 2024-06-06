@@ -41,7 +41,7 @@ export const getValidContact = async (
 
     do {
       const variables = {
-        requiredSchema: ['email:string'],
+        requiredSchema: ['telegram:string'],
         id: contactsAddresses,
         start,
         range,

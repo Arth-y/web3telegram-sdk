@@ -27,13 +27,13 @@ Web3mail is available as an [npm package](https://www.npmjs.com/package/@iexec/w
 **npm:**
 
 ```sh
-npm install @iexec/web3mail
+npm install @iexec/web3telegram
 ```
 
 **yarn:**
 
 ```sh
-yarn add @iexec/web3mail
+yarn add @iexec/web3telegram
 ```
 
 ## Get started
@@ -41,21 +41,21 @@ yarn add @iexec/web3mail
 ### Browser
 
 ```ts
-import { IExecWeb3mail } from "@iexec/web3mail";
+import { IExecWeb3telegram } from "@iexec/web3telegram";
 
 const web3Provider = window.ethereum;
-const web3mail = new IExecWeb3mail(web3Provider);
+const web3mail = new IExecWeb3telegram(web3Provider);
 ```
 
 ### NodeJS
 
 ```ts
-import { IExecWeb3mail, getWeb3Provider } from "@iexec/web3mail";
+import { IExecWeb3telegram, getWeb3Provider } from "@iexec/web3telegram";
 
 const { PRIVATE_KEY } = process.env; 
 
 const web3Provider = getWeb3Provider(PRIVATE_KEY);
-const web3mail = new IExecWeb3mail(web3Provider);
+const web3mail = new IExecWeb3telegram(web3Provider);
 ```
 
 ## Documentation

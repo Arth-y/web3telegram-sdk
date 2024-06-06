@@ -43,7 +43,7 @@ The Dapp will send an email using the object and content specified in .env, and 
 1. **Build the Docker image**: Navigate to the `/web3mail/dapp` directory of the project and run the following command to build the Docker image:
 
     ```sh
-    docker build . --tag web3mail-dapp
+    docker build . --tag web3telegram-dapp
     ```
 
 2. **Create local directories**: In your terminal, execute the following commands to create two local directories on your machine:
@@ -74,7 +74,7 @@ Docker container and execute the Dapp:
         -e IEXEC_DATASET_FILENAME=data.zip \
         -e IEXEC_APP_DEVELOPER_SECRET='{"MJ_APIKEY_PUBLIC":"<your_mailjet_public_api_key>","MJ_APIKEY_PRIVATE":"<your_mailjet_private_api_key>","MJ_SENDER":"<your_sender_email_address>"}' \
         IEXEC_REQUESTER_SECRET_1='{"emailSubject":"email_subject","emailContentEncryptionKey":"email_content_encryption_key","emailContentMultiAddr":"encrypted_email_content_multiaddress","senderName":"sender_name","contentType":"text/plain"}' \
-        web3mail-dapp
+        web3telegram-dapp
     ```
 
 After running the Docker container, you can find the result of the Dapp's execution in the `/tmp/iexec_out` directory on your machine.

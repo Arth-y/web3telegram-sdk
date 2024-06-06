@@ -1,4 +1,4 @@
-import { IExecWeb3mail, getWeb3Provider } from '@iexec/web3mail';
+import { IExecWeb3mail, getWeb3Provider } from '@iexec/web3telegram';
 import { Wallet } from 'ethers';
 
 const test = async () => {

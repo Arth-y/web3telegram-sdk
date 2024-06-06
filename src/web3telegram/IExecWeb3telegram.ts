@@ -2,15 +2,15 @@ import { Eip1193Provider } from 'ethers';
 import { IExec } from 'iexec';
 import { fetchUserContacts } from './fetchUserContacts.js';
 import { fetchMyContacts } from './fetchMyContacts.js';
-import { sendEmail } from './sendEmail.js';
+import { sendTelegram } from './sendTelegram.js';
 import {
   Contact,
   FetchUserContactsParams,
-  SendEmailParams,
+  SendTelegramParams,
   Web3SignerProvider,
   AddressOrENS,
   Web3MailConfigOptions,
-  SendEmailResponse,
+  SendTelegramResponse,
 } from './types.js';
 import { GraphQLClient } from 'graphql-request';
 import {
@@ -21,7 +21,7 @@ import {
   WHITELIST_SMART_CONTRACT_ADDRESS,
 } from '../config/config.js';
 
-export class IExecWeb3mail {
+export class IExecWeb3telegram {
   private iexec: IExec;
 
   private ipfsNode: string;
@@ -79,8 +79,8 @@ export class IExecWeb3mail {
     });
   }
 
-  sendEmail = (args: SendEmailParams): Promise<SendEmailResponse> =>
-    sendEmail({
+  sendTelegram = (args: SendTelegramParams): Promise<SendTelegramResponse> =>
+    sendTelegram({
       ...args,
       iexec: this.iexec,
       ipfsNode: this.ipfsNode,

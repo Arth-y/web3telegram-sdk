@@ -87,7 +87,7 @@ export const checkProtectedDataValidity = async (
 ): Promise<boolean> => {
   try {
     const variables = {
-      requiredSchema: ['email:string'],
+      requiredSchema: ['telegram:string'],
       id: [protectedData],
       start: 0,
       range: 1,

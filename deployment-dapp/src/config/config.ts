@@ -4,7 +4,7 @@ import { readFileSync } from 'fs';
 export const HOST = 'https://bellecour.iex.ec';
 
 //deployment parameters
-export const APP_NAME = 'web3mail';
+export const APP_NAME = 'web3telegram';
 export const APP_TYPE = 'DOCKER';
 export const FRAMEWORK = 'scone';
 
@@ -14,8 +14,8 @@ export const DEFAULT_APP_VOLUME = 1000000;
 export const APP_TAG = ['tee', 'scone'];
 
 //ENS name
-export const WEB3_MAIL_ENS_NAME_DEV = 'web3mail-dev.apps.iexec.eth';
-export const WEB3_MAIL_ENS_NAME_PROD = 'web3mail.apps.iexec.eth';
+export const WEB3_MAIL_ENS_NAME_DEV = 'web3telegram-dev.apps.iexec.eth';
+export const WEB3_MAIL_ENS_NAME_PROD = 'web3telegram.apps.iexec.eth';
 
 //scone image
 const SCONIFIER_VERSION = '5.7.5-v12';
@@ -24,7 +24,7 @@ const dappVersion = JSON.parse(
 ).version;
 
 export const DOCKER_IMAGE_NAMESPACE = 'iexechub';
-export const DOCKER_IMAGE_REPOSITORY = 'web3mail-dapp';
+export const DOCKER_IMAGE_REPOSITORY = 'web3telegram-dapp';
 export const DOCKER_IMAGE_PROD_TAG = `${dappVersion}-sconify-${SCONIFIER_VERSION}-production`;
 export const DOCKER_IMAGE_DEV_TAG = `dev-${process.env.DRONE_COMMIT}-sconify-${SCONIFIER_VERSION}-production`;
 

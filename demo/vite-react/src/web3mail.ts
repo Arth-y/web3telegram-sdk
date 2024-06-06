@@ -1,4 +1,4 @@
-import { IExecWeb3mail, Contacts } from '@iexec/web3mail';
+import { IExecWeb3mail, Contacts } from '@iexec/web3telegram';
 
 export const test = async () => {
   if (!window.ethereum) {

@@ -74,7 +74,7 @@ describe('addressOrEnsSchema()', () => {
 describe('emailSubjectSchema()', () => {
   describe('validateSync()', () => {
     it('pass with standard subject', () => {
-      const SUBJECT = 'Hello from web3mail! 🦄';
+      const SUBJECT = 'Hello from web3telegram! 🦄';
       const res = emailSubjectSchema().validateSync(SUBJECT);
       expect(res).toBe(SUBJECT);
     });

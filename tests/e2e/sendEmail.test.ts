@@ -17,7 +17,7 @@ import {
   sleep,
 } from '../test-utils.js';
 
-describe('web3mail.sendEmail()', () => {
+describe('web3telegram.sendEmail()', () => {
   let consumerWallet: HDNodeWallet;
   let providerWallet: HDNodeWallet;
   let web3mail: IExecWeb3mail;

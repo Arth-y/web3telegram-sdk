@@ -4,7 +4,7 @@ import {
   getValidContact,
   checkProtectedDataValidity,
 } from '../../../src/utils/subgraphQuery.js';
-import type { Contact } from '../../../src/web3mail/types.js';
+import type { Contact } from '../../../src/web3telegram/types.js';
 
 describe('getValidContact', () => {
   // Define the variables in the outermost scope

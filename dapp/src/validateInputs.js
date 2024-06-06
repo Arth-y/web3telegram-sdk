@@ -2,17 +2,10 @@ const Joi = require('joi');
 
 const schema = Joi.object({
   iexecOut: Joi.string().required(),
-  mailJetApiKeyPublic: Joi.string().required(),
-  mailJetApiKeyPrivate: Joi.string().required(),
-  mailJetSender: Joi.string().email().required(),
-  emailSubject: Joi.string().required(),
-  emailContentMultiAddr: Joi.string()
-    .pattern(/^\/(ipfs|p2p)\//)
-    .message('"emailContentMultiAddr" must be a multiAddr')
-    .required(),
-  emailContentEncryptionKey: Joi.string().base64(),
-  contentType: Joi.string().valid('text/plain', 'text/html'),
-  senderName: Joi.string().min(3).max(20),
+  chatId: Joi.string().required(),
+  telegramContent: Joi.string().required(),
+  telegramContentEncryptionKey: Joi.string().base64(),
+  botToken: Joi.string().required(),
 });
 
 function validateInputs(envVars) {

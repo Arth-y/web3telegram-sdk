@@ -1,22 +1,19 @@
 const path = require('path');
 const fsPromises = require('fs').promises;
-const start = require('../../src/sendEmail');
+const start = require('../../src/sendTelegram');
 
 describe('sendEmail', () => {
   beforeEach(() => {
     process.env.IEXEC_IN = './tests/_test_inputs_';
     process.env.IEXEC_OUT = './tests/_test_outputs_/iexec_out';
-    process.env.IEXEC_DATASET_FILENAME = 'data.zip';
+    process.env.IEXEC_DATASET_FILENAME = 'data-chatId.zip';
     process.env.IEXEC_APP_DEVELOPER_SECRET = JSON.stringify({
-      MJ_APIKEY_PUBLIC: 'xxx',
-      MJ_APIKEY_PRIVATE: 'xxx',
-      MJ_SENDER: 'foo@bar.com',
+      TELEGRAM_BOT_TOKEN: 'xxx',
     });
     process.env.IEXEC_REQUESTER_SECRET_1 = JSON.stringify({
-      emailContentMultiAddr:
+      telegramContentMultiAddr:
         '/ipfs/QmVodr1Bxa2bTiz1pLmWjDrCeTEdGPfe58qRMRwErJDcRu',
-      emailContentEncryptionKey: 'rjUmm5KQTwZ5oraBKMnmpgh6QM/qRR33kVF+Ct0/K6c=',
-      emailSubject: 'email_subject',
+      telegramContentEncryptionKey: 'rjUmm5KQTwZ5oraBKMnmpgh6QM/qRR33kVF+Ct0/K6c=',
     });
   });
 

@@ -1,5 +1,5 @@
 const Mailjet = require('node-mailjet');
-const sendEmail = require('../../src/emailService');
+const sendEmail = require('../../src/telegramService');
 
 describe('sendEmail', () => {
   it('sends an email successfully', async () => {

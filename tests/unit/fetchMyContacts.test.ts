@@ -8,7 +8,7 @@ import {
   WEB3_MAIL_DAPP_ADDRESS,
   WHITELIST_SMART_CONTRACT_ADDRESS,
 } from '../../src/config/config.js';
-import { fetchMyContacts } from '../../src/web3mail/fetchMyContacts.js';
+import { fetchMyContacts } from '../../src/web3telegram/fetchMyContacts.js';
 
 describe('fetchMyContacts', () => {
   it('should fetch contacts with the specified page and page size', async () => {

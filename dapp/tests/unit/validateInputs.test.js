@@ -6,15 +6,9 @@ describe('validateInputs function', () => {
   beforeEach(() => {
     envVars = {
       iexecOut: '/path/to/iexec/out',
-      mailJetApiKeyPublic: 'api_public_key',
-      mailJetApiKeyPrivate: 'api_private_key',
-      mailJetSender: 'sender@example.com',
-      emailSubject: 'Test email',
-      emailContentMultiAddr:
+      telegramContentMultiAddr:
         '/ipfs/QmVodr1Bxa2bTiz1pLmWjDrCeTEdGPfe58qRMRwErJDcRu',
-      emailContentEncryptionKey: 'rjUmm5KQTwZ5oraBKMnmpgh6QM/qRR33kVF+Ct0/K6c=',
-      contentType: 'text/plain',
-      senderName: 'sender test name',
+      telegramContentEncryptionKey: 'rjUmm5KQTwZ5oraBKMnmpgh6QM/qRR33kVF+Ct0/K6c=',
     };
   });
 

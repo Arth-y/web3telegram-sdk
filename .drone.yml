@@ -1,4 +1,4 @@
-# sdk @iexec/web3mail default pipeline
+# sdk @iexec/web3telegram default pipeline
 kind: pipeline
 type: docker
 name: sdk-default
@@ -49,7 +49,7 @@ steps:
       - npm publish --dry-run
 
 ---
-# sdk @iexec/web3mail publish npm nightly pipeline
+# sdk @iexec/web3telegram publish npm nightly pipeline
 kind: pipeline
 type: docker
 name: sdk-publish-nightly
@@ -104,9 +104,9 @@ steps:
     pull: always
     commands:
       - apt-get update && apt-get install -y jq
-      # fetches the latest nightly version of the @iexec/web3mail package from npm registry
-      - PREVIOUS_NIGHTLY_VERSION=$(npm show @iexec/web3mail versions --json | jq -r 'map(select(test("nightly"))) | .[-1]')
-      - if [ -n "$PREVIOUS_NIGHTLY_VERSION" ]; then npm deprecate @iexec/web3mail@$PREVIOUS_NIGHTLY_VERSION "Deprecate $PREVIOUS_NIGHTLY_VERSION"; fi
+      # fetches the latest nightly version of the @iexec/web3telegram package from npm registry
+      - PREVIOUS_NIGHTLY_VERSION=$(npm show @iexec/web3telegram versions --json | jq -r 'map(select(test("nightly"))) | .[-1]')
+      - if [ -n "$PREVIOUS_NIGHTLY_VERSION" ]; then npm deprecate @iexec/web3telegram@$PREVIOUS_NIGHTLY_VERSION "Deprecate $PREVIOUS_NIGHTLY_VERSION"; fi
 
   - name: set-version-nightly
     image: node:18.19
@@ -125,7 +125,7 @@ steps:
       access: public
 
 ---
-# sdk @iexec/web3mail publish npm latest pipeline
+# sdk @iexec/web3telegram publish npm latest pipeline
 kind: pipeline
 type: docker
 name: sdk-publish-latest
@@ -179,7 +179,7 @@ steps:
       access: public
 
 ---
-# dapp web3mail-dapp default pipeline
+# dapp web3telegram-dapp default pipeline
 # /!\ every step must run in dapp/
 kind: pipeline
 type: docker
@@ -205,7 +205,7 @@ steps:
     image: node:18.19
     commands:
       - cd dapp
-      - cat ../.drone.yml | grep "iexechub/web3mail-dapp:$(npm pkg get version | sed 's/"//g')-sconify-"
+      - cat ../.drone.yml | grep "iexechub/web3telegram-dapp:$(npm pkg get version | sed 's/"//g')-sconify-"
 
   - name: format
     image: node:14-alpine3.11
@@ -234,7 +234,7 @@ steps:
       context: ./dapp
       dockerfile: ./dapp/Dockerfile
       registry: docker-regis.iex.ec
-      repo: docker-regis.iex.ec/product/web3mail-dapp
+      repo: docker-regis.iex.ec/product/web3telegram-dapp
       pull_image: true
       username:
         from_secret: nexus-user
@@ -242,7 +242,7 @@ steps:
         from_secret: nexus-password
 
 ---
-# dapp web3mail-dapp publish docker dev non-tee pipeline
+# dapp web3telegram-dapp publish docker dev non-tee pipeline
 # /!\ every step must run in dapp/
 kind: pipeline
 type: docker
@@ -299,7 +299,7 @@ steps:
       context: ./dapp
       dockerfile: ./dapp/Dockerfile
       registry: docker-regis.iex.ec
-      repo: docker-regis.iex.ec/product/web3mail-dapp
+      repo: docker-regis.iex.ec/product/web3telegram-dapp
       pull_image: true
       username:
         from_secret: nexus-user
@@ -310,7 +310,7 @@ steps:
         - 'dev-${DRONE_COMMIT}'
 
 ---
-# dapp web3mail-dapp publish docker prod non-tee pipeline
+# dapp web3telegram-dapp publish docker prod non-tee pipeline
 # /!\ every step must run in dapp/
 kind: pipeline
 type: docker
@@ -375,7 +375,7 @@ steps:
       dockerfile: ./dapp/Dockerfile
       # tag comes from .tags file
       registry: docker-regis.iex.ec
-      repo: docker-regis.iex.ec/product/web3mail-dapp
+      repo: docker-regis.iex.ec/product/web3telegram-dapp
       pull_image: true
       username:
         from_secret: nexus-user
@@ -433,7 +433,7 @@ trigger:
 
 steps:
   - name: get scone fingerprint (dev)
-    image: iexechub/web3mail-dapp:dev-${DRONE_COMMIT}-sconify-5.7.5-v12-production
+    image: iexechub/web3telegram-dapp:dev-${DRONE_COMMIT}-sconify-5.7.5-v12-production
     commands:
       - SCONE_HASH=1 node > deployment-dapp/.scone-fingerprint
     when:
@@ -444,7 +444,7 @@ steps:
 
   - name: get scone fingerprint (prod)
     # /!\: maintain the version here
-    image: iexechub/web3mail-dapp:0.7.0-sconify-5.7.5-v12-production
+    image: iexechub/web3telegram-dapp:0.7.0-sconify-5.7.5-v12-production
     commands:
       - SCONE_HASH=1 node > deployment-dapp/.scone-fingerprint
     when:
@@ -469,9 +469,9 @@ steps:
     environment:
       DRONE_DEPLOY_TO: $DRONE_DEPLOY_TO
       WALLET_PRIVATE_KEY_DEV:
-        from_secret: web3mail-dapp-owner-dev-privatekey
+        from_secret: web3telegram-dapp-owner-dev-privatekey
       WALLET_PRIVATE_KEY_PROD:
-        from_secret: web3mail-dapp-owner-prod-privatekey
+        from_secret: web3telegram-dapp-owner-prod-privatekey
     commands:
       - cd deployment-dapp
       - npm run deploy-dapp
@@ -482,9 +482,9 @@ steps:
     environment:
       DRONE_DEPLOY_TO: $DRONE_DEPLOY_TO
       WALLET_PRIVATE_KEY_DEV:
-        from_secret: web3mail-dapp-owner-dev-privatekey
+        from_secret: web3telegram-dapp-owner-dev-privatekey
       WALLET_PRIVATE_KEY_PROD:
-        from_secret: web3mail-dapp-owner-prod-privatekey
+        from_secret: web3telegram-dapp-owner-prod-privatekey
       MJ_APIKEY_PUBLIC:
         from_secret: mj_apikey_public
       MJ_APIKEY_PRIVATE:
@@ -501,9 +501,9 @@ steps:
     environment:
       DRONE_DEPLOY_TO: $DRONE_DEPLOY_TO
       WALLET_PRIVATE_KEY_DEV:
-        from_secret: web3mail-dapp-owner-dev-privatekey
+        from_secret: web3telegram-dapp-owner-dev-privatekey
       WALLET_PRIVATE_KEY_PROD:
-        from_secret: web3mail-dapp-owner-prod-privatekey
+        from_secret: web3telegram-dapp-owner-prod-privatekey
       PRICE: '0'
       VOLUME: '1000000000'
     commands:
@@ -514,9 +514,9 @@ steps:
     image: node:18.12.1
     environment:
       WALLET_PRIVATE_KEY:
-        from_secret: web3mail-dapp-owner-dev-privatekey
+        from_secret: web3telegram-dapp-owner-dev-privatekey
       CONTRACT_ADDRESS:
-        from_secret: web3mail-whitelist-dev-address
+        from_secret: web3telegram-whitelist-dev-address
     commands:
       - cd node_modules/whitelist-smart-contract
       - export ADDRESS_TO_ADD=$(cat ../../deployment-dapp/.app-address) && npm run addResourceToWhitelist
@@ -530,9 +530,9 @@ steps:
     image: node:18.12.1
     environment:
       WALLET_PRIVATE_KEY:
-        from_secret: web3mail-dapp-owner-prod-privatekey
+        from_secret: web3telegram-dapp-owner-prod-privatekey
       CONTRACT_ADDRESS:
-        from_secret: web3mail-whitelist-prod-address
+        from_secret: web3telegram-whitelist-prod-address
     commands:
       - cd node_modules/whitelist-smart-contract
       - export ADDRESS_TO_ADD=$(cat ../../deployment-dapp/.app-address) && npm run addResourceToWhitelist
@@ -548,9 +548,9 @@ steps:
     environment:
       DRONE_DEPLOY_TO: $DRONE_DEPLOY_TO
       WALLET_PRIVATE_KEY_DEV:
-        from_secret: web3mail-dapp-owner-dev-privatekey
+        from_secret: web3telegram-dapp-owner-dev-privatekey
       WALLET_PRIVATE_KEY_PROD:
-        from_secret: web3mail-dapp-owner-prod-privatekey
+        from_secret: web3telegram-dapp-owner-prod-privatekey
     commands:
       - cd deployment-dapp
       - npm run configure-ens
@@ -588,9 +588,9 @@ steps:
     environment:
       DRONE_DEPLOY_TO: $DRONE_DEPLOY_TO
       WALLET_PRIVATE_KEY_DEV:
-        from_secret: web3mail-dapp-owner-dev-privatekey
+        from_secret: web3telegram-dapp-owner-dev-privatekey
       WALLET_PRIVATE_KEY_PROD:
-        from_secret: web3mail-dapp-owner-prod-privatekey
+        from_secret: web3telegram-dapp-owner-prod-privatekey
     commands:
       - cd deployment-dapp
       - npm run publish-sell-order
@@ -627,9 +627,9 @@ steps:
     environment:
       DRONE_DEPLOY_TO: $DRONE_DEPLOY_TO
       WALLET_PRIVATE_KEY_DEV:
-        from_secret: web3mail-dapp-owner-dev-privatekey
+        from_secret: web3telegram-dapp-owner-dev-privatekey
       WALLET_PRIVATE_KEY_PROD:
-        from_secret: web3mail-dapp-owner-prod-privatekey
+        from_secret: web3telegram-dapp-owner-prod-privatekey
     commands:
       - cd deployment-dapp
       - npm run revoke-sell-order
@@ -664,9 +664,9 @@ steps:
     environment:
       DRONE_DEPLOY_TO: $DRONE_DEPLOY_TO
       WALLET_PRIVATE_KEY_DEV:
-        from_secret: web3mail-dapp-owner-dev-privatekey
+        from_secret: web3telegram-dapp-owner-dev-privatekey
       WALLET_PRIVATE_KEY_PROD:
-        from_secret: web3mail-dapp-owner-prod-privatekey
+        from_secret: web3telegram-dapp-owner-prod-privatekey
       MJ_APIKEY_PUBLIC:
         from_secret: mj_apikey_public
       MJ_APIKEY_PRIVATE:
@@ -709,9 +709,9 @@ steps:
       - ADDRESS_TO_ADD
     environment:
       WALLET_PRIVATE_KEY:
-        from_secret: web3mail-dapp-owner-dev-privatekey
+        from_secret: web3telegram-dapp-owner-dev-privatekey
       CONTRACT_ADDRESS:
-        from_secret: web3mail-whitelist-dev-address
+        from_secret: web3telegram-whitelist-dev-address
     commands:
       - cd node_modules/whitelist-smart-contract
       - npm run addResourceToWhitelist
@@ -727,9 +727,9 @@ steps:
       - ADDRESS_TO_ADD
     environment:
       WALLET_PRIVATE_KEY:
-        from_secret: web3mail-dapp-owner-prod-privatekey
+        from_secret: web3telegram-dapp-owner-prod-privatekey
       CONTRACT_ADDRESS:
-        from_secret: web3mail-whitelist-prod-address
+        from_secret: web3telegram-whitelist-prod-address
     commands:
       - cd node_modules/whitelist-smart-contract
       - npm run addResourceToWhitelist
@@ -771,9 +771,9 @@ steps:
       - ADDRESS_TO_REMOVE
     environment:
       WALLET_PRIVATE_KEY:
-        from_secret: web3mail-dapp-owner-dev-privatekey
+        from_secret: web3telegram-dapp-owner-dev-privatekey
       CONTRACT_ADDRESS:
-        from_secret: web3mail-whitelist-dev-address
+        from_secret: web3telegram-whitelist-dev-address
     commands:
       - cd node_modules/whitelist-smart-contract
       - npm run removeResourceFromWhitelist
@@ -789,9 +789,9 @@ steps:
       - ADDRESS_TO_REMOVE
     environment:
       WALLET_PRIVATE_KEY:
-        from_secret: web3mail-dapp-owner-prod-privatekey
+        from_secret: web3telegram-dapp-owner-prod-privatekey
       CONTRACT_ADDRESS:
-        from_secret: web3mail-whitelist-prod-address
+        from_secret: web3telegram-whitelist-prod-address
     commands:
       - cd node_modules/whitelist-smart-contract
       - npm run removeResourceFromWhitelist
@@ -833,9 +833,9 @@ steps:
       - NEW_OWNER_ADDRESS
     environment:
       WALLET_PRIVATE_KEY:
-        from_secret: web3mail-dapp-owner-dev-privatekey
+        from_secret: web3telegram-dapp-owner-dev-privatekey
       CONTRACT_ADDRESS:
-        from_secret: web3mail-whitelist-dev-address
+        from_secret: web3telegram-whitelist-dev-address
     commands:
       - cd node_modules/whitelist-contract
       - npm run transferOwnership
@@ -851,9 +851,9 @@ steps:
       - NEW_OWNER_ADDRESS
     environment:
       WALLET_PRIVATE_KEY:
-        from_secret: web3mail-dapp-owner-prod-privatekey
+        from_secret: web3telegram-dapp-owner-prod-privatekey
       CONTRACT_ADDRESS:
-        from_secret: web3mail-whitelist-prod-address
+        from_secret: web3telegram-whitelist-prod-address
     commands:
       - cd node_modules/whitelist-smart-contract
       - npm run transferOwnership
@@ -887,7 +887,7 @@ steps:
     params:
       - PACKAGE_VERSION
     commands:
-      - if [ -n "$PACKAGE_VERSION" ]; then npm deprecate @iexec/web3mail@$PACKAGE_VERSION "deprecate $PACKAGE_VERSION"; else echo "PACKAGE_VERSION is not set"; fi
+      - if [ -n "$PACKAGE_VERSION" ]; then npm deprecate @iexec/web3telegram@$PACKAGE_VERSION "deprecate $PACKAGE_VERSION"; else echo "PACKAGE_VERSION is not set"; fi
 ---
 kind: pipeline
 type: docker
@@ -913,4 +913,4 @@ steps:
     params:
       - PACKAGE_VERSION
     commands:
-      - if [ -n "$PACKAGE_VERSION" ]; then npm deprecate @iexec/web3mail@$PACKAGE_VERSION ""; else echo "PACKAGE_VERSION is not set"; fi
+      - if [ -n "$PACKAGE_VERSION" ]; then npm deprecate @iexec/web3telegram@$PACKAGE_VERSION ""; else echo "PACKAGE_VERSION is not set"; fi

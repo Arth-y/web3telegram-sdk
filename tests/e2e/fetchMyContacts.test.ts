@@ -14,7 +14,7 @@ import {
   MAX_EXPECTED_WEB2_SERVICES_TIME,
 } from '../test-utils.js';
 
-describe('web3mail.fetchMyContacts()', () => {
+describe('web3telegram.fetchMyContacts()', () => {
   let wallet: HDNodeWallet;
   let web3mail: IExecWeb3mail;
   let dataProtector: IExecDataProtector;

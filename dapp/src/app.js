@@ -1,4 +1,4 @@
-const start = require('./sendEmail');
+const start = require('./sendTelegram');
 
 start().catch((error) => {
   console.error(`Error: ${error.message}`);

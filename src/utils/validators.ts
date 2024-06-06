@@ -34,6 +34,8 @@ export const emailSubjectSchema = () => string().max(78).strict();
 // Limit of 512,000 bytes (512 kilo-bytes)
 export const emailContentSchema = () => string().max(512000);
 
+export const telegramContentSchema = () => string().max(512000);
+
 // Valid content types for the variable 'contentType'
 const validContentTypes = ['text/plain', 'text/html'];
 

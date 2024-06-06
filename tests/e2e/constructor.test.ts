@@ -9,7 +9,7 @@ import {
 } from '../../src/config/config.js';
 import { IExecWeb3mail } from '../../src/index.js';
 
-describe('IExecWeb3mail()', () => {
+describe('IExecWeb3telegram()', () => {
   it('throw when instantiated with an invalid ethProvider', async () => {
     const invalidProvider: any = null;
     expect(() => new IExecWeb3mail(invalidProvider)).toThrow(

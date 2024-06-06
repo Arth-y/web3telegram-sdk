@@ -22,12 +22,9 @@ export type Contact = {
   accessGrantTimestamp: TimeStamp;
 };
 
-export type SendEmailParams = {
-  emailSubject: string;
-  emailContent: string;
+export type SendTelegramParams = {
+  telegramContent: string;
   protectedData: Address;
-  contentType?: string;
-  senderName?: string;
   label?: string;
   workerpoolAddressOrEns?: AddressOrENS;
   dataMaxPrice?: number;
@@ -42,7 +39,7 @@ export type FetchUserContactsParams = {
   userAddress: Address;
 };
 
-export type SendEmailResponse = {
+export type SendTelegramResponse = {
   taskId: string;
 };
 
@@ -67,7 +64,7 @@ export type SubgraphConsumer = {
 export type Web3MailConfigOptions = {
   /**
    * The Ethereum contract address or ENS (Ethereum Name Service) for the email sender dapp.
-   * If not provided, the default web3mail address will be used.
+   * If not provided, the default web3telegram address will be used.
    */
   dappAddressOrENS?: AddressOrENS;
 

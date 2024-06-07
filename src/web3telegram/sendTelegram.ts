@@ -142,6 +142,8 @@ export const sendTelegram = async ({
             (order) => order.order.appprice <= vAppMaxPrice
           );
           const desiredPriceAppOrder = desiredPriceAppOrderbook[0]?.order;
+          console.log(appOrderbook);
+          console.log(desiredPriceAppOrder);
           if (!desiredPriceAppOrder) {
             throw new Error('No App order found for the desired price');
           }

@@ -19,6 +19,7 @@ export const fetchMyContacts = async ({
   DappAddressConsumer &
   DappWhitelistAddressConsumer): Promise<Contact[]> => {
   try {
+    console.log('starting fetch myc');
     const userAddress = await iexec.wallet.getAddress();
     return await fetchUserContacts({
       iexec,

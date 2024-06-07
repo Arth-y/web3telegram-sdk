@@ -29,6 +29,7 @@ export const fetchUserContacts = async ({
   DappWhitelistAddressConsumer &
   FetchUserContactsParams): Promise<Contact[]> => {
   try {
+    console.log('starting fetching uc');
     const vDappAddressOrENS = addressOrEnsSchema()
       .required()
       .label('dappAddressOrENS')
@@ -41,7 +42,17 @@ export const fetchUserContacts = async ({
       .required()
       .label('userAddress')
       .validateSync(userAddress);
-
+    console.log('schema ok');
+    console.log('userAdress1', vUserAddress);
+    console.log('appAdress1', vDappAddressOrENS);
+    console.log('appAdress2', vDappWhitelistAddress);
+    console.log(
+      fetchAllOrdersByApp({
+        iexec,
+        userAddress: vUserAddress,
+        appAddress: vDappAddressOrENS,
+      })
+    );
     const [dappOrders, whitelistOrders] = await Promise.all([
       fetchAllOrdersByApp({
         iexec,
@@ -54,6 +65,8 @@ export const fetchUserContacts = async ({
         appAddress: vDappWhitelistAddress,
       }),
     ]);
+
+    console.log('first log ', dappOrders, ' ', whitelistOrders);
 
     const orders = dappOrders.concat(whitelistOrders);
     const myContacts: Contact[] = [];
